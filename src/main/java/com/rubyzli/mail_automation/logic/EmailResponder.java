@@ -1,6 +1,7 @@
 package com.rubyzli.mail_automation.logic;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -16,9 +17,11 @@ import java.util.Properties;
 
 @Component
 public class EmailResponder {
+    @Value("${email}")
+    private String senderEmail;
+    @Value("${password}")
+    private String senderPassword;
     public void sendAutoResponse(String recipient, String subject, String body) {
-        String senderEmail = "rebecasimon027@yahoo.com";
-        String senderPassword = "lsqsuetldsdbenuf";
 
         String host = "smtp.mail.yahoo.com";
         int port = 465;
@@ -56,9 +59,6 @@ public class EmailResponder {
 
 
     public void checkMailbox() {
-        String receiverEmail = "rebecasimon027@yahoo.com";
-        String receiverPassword = "lsqsuetldsdbenuf";
-
         String host = "imap.mail.yahoo.com";
         int port = 993;
 
@@ -73,7 +73,7 @@ public class EmailResponder {
             Session session = Session.getInstance(props, null);
 
             Store store = session.getStore();
-            store.connect(host, port, receiverEmail, receiverPassword);
+            store.connect(host, port, senderEmail, senderPassword);
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
